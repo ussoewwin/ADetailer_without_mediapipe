@@ -1,22 +1,23 @@
-# ADetailer (Python 3.13 + InsightFace Support)
+# ADetailer (Python 3.13 Compatible)
 
 ADetailer is an extension for the stable diffusion webui that does automatic masking and inpainting. It is similar to the Detection Detailer.
 
 ## 🎉 Features of This Modified Version
 
-This version is a modified ADetailer designed to **work with Python 3.13 without MediaPipe**:
+This version is a modified ADetailer designed to **work with Python 3.13**:
 
-- **No MediaPipe Required**: Works without MediaPipe dependency (incompatible with Python 3.13)
-- **InsightFace Support**: Face detection using InsightFace as a fallback when MediaPipe models are selected
 - **Python 3.13 Compatible**: Fully compatible with Python 3.13+
-- **YOLO Models**: Uses YOLO models (face_yolov8n, hand_yolov8n, etc.) as primary detection method
+- **YOLO Models Only**: Uses proven YOLO models (face_yolov8n, hand_yolov8n, etc.) for detection
 - **Automatic Model Download**: All required YOLO models are automatically downloaded on first run
+- **No MediaPipe**: MediaPipe dependency removed (incompatible with Python 3.13)
+- **Simplified & Clean**: Removed unnecessary code, focusing on what works best
 
 ### Modifications
 
-- `mediapipe.py`: Added InsightFace-based face detection and mesh detection implementations
-- `install.py`: Automatic YOLO model download from Hugging Face, Python 3.13 compatibility
-- `pyproject.toml`: Updated dependencies to remove MediaPipe requirement
+- Removed MediaPipe and InsightFace dependencies (not needed for YOLO models)
+- `install.py`: Automatic YOLO model download from Hugging Face
+- `common.py`: Removed MediaPipe model options
+- `pyproject.toml`: Updated dependencies for Python 3.13 compatibility
 
 Original project: [Bing-su/adetailer](https://github.com/Bing-su/adetailer)
 
@@ -34,13 +35,7 @@ Original project: [Bing-su/adetailer](https://github.com/Bing-su/adetailer)
 6. **All required models will be downloaded automatically on first run** (approximately 100-200MB)
 7. Restart WebUI completely
 
-### Optional: InsightFace Installation (for MediaPipe model fallback)
-
-If you want to use `mediapipe_face_*` models, you need InsightFace:
-
-**Python 3.13 Compatible Version**: [ussoewwin/Insightface_for_windows](https://huggingface.co/ussoewwin/Insightface_for_windows)
-
-However, we **recommend using YOLO models** (`face_yolov8n.pt`, `face_yolov8s.pt`, etc.) which work out of the box.
+That's it! No additional dependencies or manual model downloads required.
 
 ## Options
 
@@ -94,18 +89,15 @@ API request example: [wiki/REST-API](https://github.com/Bing-su/adetailer/wiki/R
 
 ## Model
 
-| Model                 | Target                | mAP 50                        | mAP 50-95                     | Notes                                      |
-| --------------------- | --------------------- | ----------------------------- | ----------------------------- | ------------------------------------------ |
-| face_yolov8n.pt       | 2D / realistic face   | 0.660                         | 0.366                         | ✅ **Recommended** - Works out of the box  |
-| face_yolov8s.pt       | 2D / realistic face   | 0.713                         | 0.404                         | ✅ **Recommended** - Higher accuracy       |
-| hand_yolov8n.pt       | 2D / realistic hand   | 0.767                         | 0.505                         | ✅ Works out of the box                    |
-| person_yolov8n-seg.pt | 2D / realistic person | 0.782 (bbox)<br/>0.761 (mask) | 0.555 (bbox)<br/>0.460 (mask) | ✅ Works out of the box                    |
-| person_yolov8s-seg.pt | 2D / realistic person | 0.824 (bbox)<br/>0.809 (mask) | 0.605 (bbox)<br/>0.508 (mask) | ✅ Higher accuracy                         |
-| mediapipe_face_full   | realistic face        | -                             | -                             | ⚠️ Uses InsightFace fallback (less precise) |
-| mediapipe_face_short  | realistic face        | -                             | -                             | ⚠️ Uses InsightFace fallback (less precise) |
-| mediapipe_face_mesh   | realistic face        | -                             | -                             | ⚠️ Uses InsightFace fallback (less precise) |
+| Model                 | Target                | mAP 50                        | mAP 50-95                     |
+| --------------------- | --------------------- | ----------------------------- | ----------------------------- |
+| face_yolov8n.pt       | 2D / realistic face   | 0.660                         | 0.366                         |
+| face_yolov8s.pt       | 2D / realistic face   | 0.713                         | 0.404                         |
+| hand_yolov8n.pt       | 2D / realistic hand   | 0.767                         | 0.505                         |
+| person_yolov8n-seg.pt | 2D / realistic person | 0.782 (bbox)<br/>0.761 (mask) | 0.555 (bbox)<br/>0.460 (mask) |
+| person_yolov8s-seg.pt | 2D / realistic person | 0.824 (bbox)<br/>0.809 (mask) | 0.605 (bbox)<br/>0.508 (mask) |
 
-**Note**: `mediapipe_face_*` models use InsightFace as a fallback since MediaPipe is not available in Python 3.13. For best results, **use YOLO models** (face_yolov8n.pt or face_yolov8s.pt) which provide better accuracy and work natively.
+**All models are automatically downloaded on first run.** MediaPipe models have been removed as they are not compatible with Python 3.13+.
 
 The YOLO models can be found on huggingface [Bingsu/adetailer](https://huggingface.co/Bingsu/adetailer).
 

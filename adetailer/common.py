@@ -108,14 +108,7 @@ def get_models(
     ]
     models.update(download_models(*to_download, check_remote=huggingface))
 
-    models.update(
-        {
-            "mediapipe_face_full": "mediapipe_face_full",
-            "mediapipe_face_short": "mediapipe_face_short",
-            "mediapipe_face_mesh": "mediapipe_face_mesh",
-            "mediapipe_face_mesh_eyes_only": "mediapipe_face_mesh_eyes_only",
-        }
-    )
+    # MediaPipe models removed - use YOLO models instead for Python 3.13+ compatibility
 
     invalid_keys = [k for k, v in models.items() if v == "INVALID"]
     for key in invalid_keys:

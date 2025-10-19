@@ -208,9 +208,6 @@ class ADetailerArgs(BaseModel, extra=Extra.forbid):
 
         return p
 
-    def is_mediapipe(self) -> bool:
-        return self.ad_model.lower().startswith("mediapipe")
-
     def need_skip(self) -> bool:
         return self.ad_model == "None" or self.ad_tab_enable is False
 

@@ -37,7 +37,6 @@ from adetailer import (
     ADETAILER,
     __version__,
     get_models,
-    mediapipe_predict,
     ultralytics_predict,
 )
 from adetailer.args import (
@@ -834,21 +833,16 @@ class AfterDetailerScript(scripts.Script):
         i2i = self.get_i2i_p(p, args, pp.image)
         ad_prompts, ad_negatives = self.get_prompt(p, args)
 
-        is_mediapipe = args.is_mediapipe()
-
-        if is_mediapipe:
-            pred = mediapipe_predict(args.ad_model, pp.image, args.ad_confidence)
-
-        else:
-            ad_model = self.get_ad_model(args.ad_model)
-            with disable_safe_unpickle():
-                pred = ultralytics_predict(
-                    ad_model,
-                    image=pp.image,
-                    confidence=args.ad_confidence,
-                    device=self.ultralytics_device,
-                    classes=args.ad_model_classes,
-                )
+        # Only YOLO models are supported
+        ad_model = self.get_ad_model(args.ad_model)
+        with disable_safe_unpickle():
+            pred = ultralytics_predict(
+                ad_model,
+                image=pp.image,
+                confidence=args.ad_confidence,
+                device=self.ultralytics_device,
+                classes=args.ad_model_classes,
+            )
 
         if pred.preview is None:
             print(
