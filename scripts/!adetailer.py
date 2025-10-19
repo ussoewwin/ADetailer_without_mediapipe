@@ -864,8 +864,7 @@ class AfterDetailerScript(scripts.Script):
         processed = None
         state.job_count += steps
 
-        if is_mediapipe:
-            print(f"mediapipe: {steps} detected.")
+        print(f"ADetailer: {steps} detected.")
 
         p2 = copy(i2i)
         for j in range(steps):
