@@ -4,43 +4,43 @@ ADetailer is an extension for the stable diffusion webui that does automatic mas
 
 ## 🎉 Features of This Modified Version
 
-This version is a modified ADetailer designed to **work with Python 3.13**:
+This version is a modified ADetailer designed to **work with Python 3.13 without MediaPipe**:
 
-- **InsightFace Support**: Face detection using InsightFace when MediaPipe is not available
-- **Python 3.13 Compatible**: Relaxed MediaPipe dependencies to work with Python 3.13
-- **Automatic Fallback**: Automatically switches to InsightFace when MediaPipe is unavailable
+- **No MediaPipe Required**: Works without MediaPipe dependency (incompatible with Python 3.13)
+- **InsightFace Support**: Face detection using InsightFace as a fallback when MediaPipe models are selected
+- **Python 3.13 Compatible**: Fully compatible with Python 3.13+
+- **YOLO Models**: Uses YOLO models (face_yolov8n, hand_yolov8n, etc.) as primary detection method
+- **Automatic Model Download**: All required YOLO models are automatically downloaded on first run
 
 ### Modifications
 
 - `mediapipe.py`: Added InsightFace-based face detection and mesh detection implementations
-- `install.py`: Updated dependency management for Python 3.13 compatibility
-- `pyproject.toml`: Updated dependencies
+- `install.py`: Automatic YOLO model download from Hugging Face, Python 3.13 compatibility
+- `pyproject.toml`: Updated dependencies to remove MediaPipe requirement
 
 Original project: [Bing-su/adetailer](https://github.com/Bing-su/adetailer)
 
 ## Install
 
-### InsightFace Installation (Python 3.13)
-
-This modified version requires a Python 3.13 compatible version of InsightFace.
-
-Since the official InsightFace does not support Python 3.13, please use this custom build:
-
-**Python 3.13 Compatible Version**: [ussoewwin/Insightface_for_windows](https://huggingface.co/ussoewwin/Insightface_for_windows)
-
-Please refer to the Hugging Face repository above for installation instructions.
-
-### Extension Installation
+### Quick Installation
 
 **Note**: While the repository name is `ADetailer_without_mediapipe`, the extension works under the same name as the original ADetailer. If you already have the original ADetailer installed, please uninstall it before installing this version.
 
-1. Open "Extensions" tab.
-2. Open "Install from URL" tab in the tab.
-3. Enter `https://github.com/ussoewwin/ADetailer_without_mediapipe.git` to "URL for extension's git repository".
-4. Press "Install" button.
-5. Wait 5 seconds, and you will see the message "Installed into stable-diffusion-webui\extensions\ADetailer_without_mediapipe. Use Installed tab to restart".
-6. Go to "Installed" tab, click "Check for updates", and then click "Apply and restart UI". (The next time you can also use this method to update extensions.)
-7. Completely restart A1111 webui including your terminal. (If you do not know what is a "terminal", you can reboot your computer: turn your computer off and turn it on again.)
+1. Open "Extensions" tab in WebUI
+2. Open "Install from URL" tab
+3. Enter `https://github.com/ussoewwin/ADetailer_without_mediapipe.git` to "URL for extension's git repository"
+4. Press "Install" button
+5. Go to "Installed" tab, click "Check for updates", and then click "Apply and restart UI"
+6. **All required models will be downloaded automatically on first run** (approximately 100-200MB)
+7. Restart WebUI completely
+
+### Optional: InsightFace Installation (for MediaPipe model fallback)
+
+If you want to use `mediapipe_face_*` models, you need InsightFace:
+
+**Python 3.13 Compatible Version**: [ussoewwin/Insightface_for_windows](https://huggingface.co/ussoewwin/Insightface_for_windows)
+
+However, we **recommend using YOLO models** (`face_yolov8n.pt`, `face_yolov8s.pt`, etc.) which work out of the box.
 
 ## Options
 

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import importlib.util
+import os
 import subprocess
 import sys
 from importlib.metadata import version  # python >= 3.8
+from pathlib import Path
 
 from packaging.version import parse
 
@@ -43,11 +45,57 @@ def run_pip(*args):
     subprocess.run([sys.executable, "-m", "pip", "install", *args], check=True)
 
 
+def download_models():
+    """Download required YOLO models for ADetailer"""
+    try:
+        from huggingface_hub import hf_hub_download
+    except ImportError:
+        print("[-] ADetailer: Installing huggingface_hub for model download...")
+        run_pip("huggingface_hub")
+        from huggingface_hub import hf_hub_download
+    
+    # Get the extension directory
+    ext_dir = Path(__file__).parent
+    models_dir = ext_dir / "models"
+    models_dir.mkdir(exist_ok=True)
+    
+    # List of models to download
+    models_to_download = [
+        ("Bingsu/adetailer", "face_yolov8n.pt"),
+        ("Bingsu/adetailer", "face_yolov8s.pt"),
+        ("Bingsu/adetailer", "hand_yolov8n.pt"),
+        ("Bingsu/adetailer", "person_yolov8n-seg.pt"),
+        ("Bingsu/adetailer", "person_yolov8s-seg.pt"),
+        ("Bingsu/yolo-world-mirror", "yolov8x-worldv2.pt"),
+    ]
+    
+    print("[-] ADetailer: Checking for required models...")
+    for repo_id, filename in models_to_download:
+        model_path = models_dir / filename
+        if model_path.exists():
+            continue
+        
+        try:
+            print(f"[-] ADetailer: Downloading {filename}...")
+            downloaded_path = hf_hub_download(
+                repo_id=repo_id,
+                filename=filename,
+                local_dir=str(models_dir),
+                local_dir_use_symlinks=False
+            )
+            print(f"[-] ADetailer: Downloaded {filename}")
+        except Exception as e:
+            print(f"[-] ADetailer: Failed to download {filename}: {e}")
+    
+    print("[-] ADetailer: Model check complete")
+
+
 def install():
     deps = [
         # requirements
         ("ultralytics", "8.3.75", None),
         ("rich", "13.0.0", None),
+        ("huggingface_hub", None, None),
     ]
 
     pkgs = []
@@ -65,6 +113,9 @@ def install():
 
     if pkgs:
         run_pip(*pkgs)
+    
+    # Download models after installing dependencies
+    download_models()
 
 
 try:
