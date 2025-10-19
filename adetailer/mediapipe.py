@@ -216,10 +216,14 @@ def get_insightface_app():
     if _insightface_app is None:
         try:
             from insightface.app import FaceAnalysis
-            _insightface_app = FaceAnalysis(providers=['CPUExecutionProvider'])
+            # Try GPU first, fallback to CPU
+            providers = ['CUDAExecutionProvider', 'CPUExecutionProvider']
+            _insightface_app = FaceAnalysis(name='buffalo_l', providers=providers)
             _insightface_app.prepare(ctx_id=0, det_size=(640, 640))
+            print("[ADetailer] InsightFace initialized successfully (used as MediaPipe replacement)")
         except Exception as e:
             print(f"[ADetailer] Failed to initialize InsightFace: {e}")
+            print("[ADetailer] Tip: For better results, use YOLO models (face_yolov8n.pt) instead of mediapipe_face_* models")
             _insightface_app = False
     return _insightface_app if _insightface_app is not False else None
 

@@ -94,16 +94,18 @@ API request example: [wiki/REST-API](https://github.com/Bing-su/adetailer/wiki/R
 
 ## Model
 
-| Model                 | Target                | mAP 50                        | mAP 50-95                     |
-| --------------------- | --------------------- | ----------------------------- | ----------------------------- |
-| face_yolov8n.pt       | 2D / realistic face   | 0.660                         | 0.366                         |
-| face_yolov8s.pt       | 2D / realistic face   | 0.713                         | 0.404                         |
-| hand_yolov8n.pt       | 2D / realistic hand   | 0.767                         | 0.505                         |
-| person_yolov8n-seg.pt | 2D / realistic person | 0.782 (bbox)<br/>0.761 (mask) | 0.555 (bbox)<br/>0.460 (mask) |
-| person_yolov8s-seg.pt | 2D / realistic person | 0.824 (bbox)<br/>0.809 (mask) | 0.605 (bbox)<br/>0.508 (mask) |
-| mediapipe_face_full   | realistic face        | -                             | -                             |
-| mediapipe_face_short  | realistic face        | -                             | -                             |
-| mediapipe_face_mesh   | realistic face        | -                             | -                             |
+| Model                 | Target                | mAP 50                        | mAP 50-95                     | Notes                                      |
+| --------------------- | --------------------- | ----------------------------- | ----------------------------- | ------------------------------------------ |
+| face_yolov8n.pt       | 2D / realistic face   | 0.660                         | 0.366                         | ✅ **Recommended** - Works out of the box  |
+| face_yolov8s.pt       | 2D / realistic face   | 0.713                         | 0.404                         | ✅ **Recommended** - Higher accuracy       |
+| hand_yolov8n.pt       | 2D / realistic hand   | 0.767                         | 0.505                         | ✅ Works out of the box                    |
+| person_yolov8n-seg.pt | 2D / realistic person | 0.782 (bbox)<br/>0.761 (mask) | 0.555 (bbox)<br/>0.460 (mask) | ✅ Works out of the box                    |
+| person_yolov8s-seg.pt | 2D / realistic person | 0.824 (bbox)<br/>0.809 (mask) | 0.605 (bbox)<br/>0.508 (mask) | ✅ Higher accuracy                         |
+| mediapipe_face_full   | realistic face        | -                             | -                             | ⚠️ Uses InsightFace fallback (less precise) |
+| mediapipe_face_short  | realistic face        | -                             | -                             | ⚠️ Uses InsightFace fallback (less precise) |
+| mediapipe_face_mesh   | realistic face        | -                             | -                             | ⚠️ Uses InsightFace fallback (less precise) |
+
+**Note**: `mediapipe_face_*` models use InsightFace as a fallback since MediaPipe is not available in Python 3.13. For best results, **use YOLO models** (face_yolov8n.pt or face_yolov8s.pt) which provide better accuracy and work natively.
 
 The YOLO models can be found on huggingface [Bingsu/adetailer](https://huggingface.co/Bingsu/adetailer).
 
