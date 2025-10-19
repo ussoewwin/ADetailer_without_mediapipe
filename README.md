@@ -39,26 +39,32 @@ That's it! No additional dependencies or manual model downloads required.
 
 ## Options
 
-| Model, Prompts                    |                                                                                    |                                                                                                                                                        |
-| --------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| ADetailer model                   | Determine what to detect.                                                          | `None` = disable                                                                                                                                       |
-| ADetailer model classes           | Comma separated class names to detect. only available when using YOLO World models | If blank, use default values.<br/>default = [COCO 80 classes](https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml) |
-| ADetailer prompt, negative prompt | Prompts and negative prompts to apply                                              | If left blank, it will use the same as the input.                                                                                                      |
-| Skip img2img                      | Skip img2img. In practice, this works by changing the step count of img2img to 1.  | img2img only                                                                                                                                           |
+### Model & Prompts
 
-| Detection                            |                                                                                              |              |
-| ------------------------------------ | -------------------------------------------------------------------------------------------- | ------------ |
-| Detection model confidence threshold | Only objects with a detection model confidence above this threshold are used for inpainting. |              |
-| Mask min/max ratio                   | Only use masks whose area is between those ratios for the area of the entire image.          |              |
-| Mask only the top k largest          | Only use the k objects with the largest area of the bbox.                                    | 0 to disable |
+| Option | Description | Default |
+|--------|-------------|---------|
+| **ADetailer model** | Determine what to detect | `None` = disable |
+| **ADetailer model classes** | Comma separated class names to detect (YOLO World models only) | If blank, use default values<br/>default = [COCO 80 classes](https://github.com/ultralytics/ultralytics/blob/main/ultralytics/cfg/datasets/coco.yaml) |
+| **ADetailer prompt, negative prompt** | Prompts and negative prompts to apply | If left blank, uses the same as input |
+| **Skip img2img** | Skip img2img (changes step count to 1) | img2img only |
+
+### Detection
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| **Detection model confidence threshold** | Only objects with confidence above this threshold are used | - |
+| **Mask min/max ratio** | Only use masks whose area is between these ratios | - |
+| **Mask only the top k largest** | Only use the k objects with largest bbox area | 0 to disable |
 
 If you want to exclude objects in the background, try setting the min ratio to around `0.01`.
 
-| Mask Preprocessing              |                                                                                                                                     |                                                                                         |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| Mask x, y offset                | Moves the mask horizontally and vertically by                                                                                       |                                                                                         |
-| Mask erosion (-) / dilation (+) | Enlarge or reduce the detected mask.                                                                                                | [opencv example](https://docs.opencv.org/4.7.0/db/df6/tutorial_erosion_dilatation.html) |
-| Mask merge mode                 | `None`: Inpaint each mask<br/>`Merge`: Merge all masks and inpaint<br/>`Merge and Invert`: Merge all masks and Invert, then inpaint |                                                                                         |
+### Mask Preprocessing
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| **Mask x, y offset** | Moves the mask horizontally and vertically | - |
+| **Mask erosion (-) / dilation (+)** | Enlarge or reduce the detected mask | [opencv example](https://docs.opencv.org/4.7.0/db/df6/tutorial_erosion_dilatation.html) |
+| **Mask merge mode** | `None`: Inpaint each mask<br/>`Merge`: Merge all masks and inpaint<br/>`Merge and Invert`: Merge all masks and Invert, then inpaint | - |
 
 Applied in this order: x, y offset → erosion/dilation → merge/invert.
 
@@ -87,15 +93,15 @@ API request example: [wiki/REST-API](https://github.com/Bing-su/adetailer/wiki/R
 
 - 📜 [ADetailer Installation and 5 Usage Methods](https://kindanai.com/en/manual-adetailer/)
 
-## Model
+## Models
 
-| Model                 | Target                | mAP 50                        | mAP 50-95                     |
-| --------------------- | --------------------- | ----------------------------- | ----------------------------- |
-| face_yolov8n.pt       | 2D / realistic face   | 0.660                         | 0.366                         |
-| face_yolov8s.pt       | 2D / realistic face   | 0.713                         | 0.404                         |
-| hand_yolov8n.pt       | 2D / realistic hand   | 0.767                         | 0.505                         |
-| person_yolov8n-seg.pt | 2D / realistic person | 0.782 (bbox)<br/>0.761 (mask) | 0.555 (bbox)<br/>0.460 (mask) |
-| person_yolov8s-seg.pt | 2D / realistic person | 0.824 (bbox)<br/>0.809 (mask) | 0.605 (bbox)<br/>0.508 (mask) |
+| Model | Target | mAP 50 | mAP 50-95 |
+|-------|--------|--------|-----------|
+| **face_yolov8n.pt** | 2D / realistic face | 0.660 | 0.366 |
+| **face_yolov8s.pt** | 2D / realistic face | 0.713 | 0.404 |
+| **hand_yolov8n.pt** | 2D / realistic hand | 0.767 | 0.505 |
+| **person_yolov8n-seg.pt** | 2D / realistic person | 0.782 (bbox)<br/>0.761 (mask) | 0.555 (bbox)<br/>0.460 (mask) |
+| **person_yolov8s-seg.pt** | 2D / realistic person | 0.824 (bbox)<br/>0.809 (mask) | 0.605 (bbox)<br/>0.508 (mask) |
 
 **All models are automatically downloaded on first run.** MediaPipe models have been removed as they are not compatible with Python 3.13+.
 
@@ -132,5 +138,7 @@ ADetailer is a derivative work that uses two AGPL-licensed works (stable-diffusi
 - https://github.com/ototadana/sd-face-editor
 - https://github.com/continue-revolution/sd-webui-segment-anything
 - https://github.com/portu-sim/sd-webui-bmab
- 
- 
+
+## Verified Commits Enabled
+
+This repository uses GPG-signed commits for verification. All commits are cryptographically signed to ensure authenticity and integrity.
