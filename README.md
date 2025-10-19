@@ -1,38 +1,38 @@
-# ADetailer (Python 3.13 + InsightFace対応版)
+# ADetailer (Python 3.13 + InsightFace Support)
 
 ADetailer is an extension for the stable diffusion webui that does automatic masking and inpainting. It is similar to the Detection Detailer.
 
-## 🎉 この改造版の特徴
+## 🎉 Features of This Modified Version
 
-このバージョンは、**Python 3.13環境での動作**を実現するために改造されたADetailerです：
+This version is a modified ADetailer designed to **work with Python 3.13**:
 
-- **InsightFace対応**: MediaPipeが使えない環境でも、InsightFaceを使って顔検出が可能
-- **Python 3.13対応**: MediaPipeの依存関係を緩和し、Python 3.13でも動作
-- **自動フォールバック**: MediaPipeが利用できない場合、自動的にInsightFaceに切り替わります
+- **InsightFace Support**: Face detection using InsightFace when MediaPipe is not available
+- **Python 3.13 Compatible**: Relaxed MediaPipe dependencies to work with Python 3.13
+- **Automatic Fallback**: Automatically switches to InsightFace when MediaPipe is unavailable
 
-### 改造内容
+### Modifications
 
-- `mediapipe.py`: InsightFaceによる顔検出・メッシュ検出の実装を追加
-- `install.py`: Python 3.13対応の依存関係管理
-- `pyproject.toml`: 依存関係の更新
+- `mediapipe.py`: Added InsightFace-based face detection and mesh detection implementations
+- `install.py`: Updated dependency management for Python 3.13 compatibility
+- `pyproject.toml`: Updated dependencies
 
-元のプロジェクト: [Bing-su/adetailer](https://github.com/Bing-su/adetailer)
+Original project: [Bing-su/adetailer](https://github.com/Bing-su/adetailer)
 
 ## Install
 
-### InsightFaceのインストール（Python 3.13用）
+### InsightFace Installation (Python 3.13)
 
-この改造版を使用するには、Python 3.13対応のInsightFaceが必要です。
+This modified version requires a Python 3.13 compatible version of InsightFace.
 
-公式のInsightFaceはPython 3.13に対応していないため、以下のカスタム版を使用してください：
+Since the official InsightFace does not support Python 3.13, please use this custom build:
 
-**Python 3.13対応版**: [ussoewwin/Insightface_for_windows](https://huggingface.co/ussoewwin/Insightface_for_windows)
+**Python 3.13 Compatible Version**: [ussoewwin/Insightface_for_windows](https://huggingface.co/ussoewwin/Insightface_for_windows)
 
-インストール方法は、上記のHugging Faceリポジトリを参照してください。
+Please refer to the Hugging Face repository above for installation instructions.
 
-### 拡張機能のインストール
+### Extension Installation
 
-**注意**: リポジトリ名は`ADetailer_without_mediapipe`ですが、拡張機能自体は元のADetailerと同じ名前で動作します。元のADetailerが既にインストールされている場合は、アンインストールしてからこちらをインストールしてください。
+**Note**: While the repository name is `ADetailer_without_mediapipe`, the extension works under the same name as the original ADetailer. If you already have the original ADetailer installed, please uninstall it before installing this version.
 
 1. Open "Extensions" tab.
 2. Open "Install from URL" tab in the tab.
