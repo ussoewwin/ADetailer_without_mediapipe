@@ -139,6 +139,6 @@ ADetailer is a derivative work that uses two AGPL-licensed works (stable-diffusi
 - https://github.com/continue-revolution/sd-webui-segment-anything
 - https://github.com/portu-sim/sd-webui-bmab
 
-## Verified Commits Enabled
+---
 
-This repository uses GPG-signed commits for verification. All commits are cryptographically signed to ensure authenticity and integrity.
+**Note**: All commits are GPG signed for verification.
