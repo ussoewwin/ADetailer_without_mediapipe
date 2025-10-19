@@ -132,3 +132,5 @@ ADetailer is a derivative work that uses two AGPL-licensed works (stable-diffusi
 - https://github.com/ototadana/sd-face-editor
 - https://github.com/continue-revolution/sd-webui-segment-anything
 - https://github.com/portu-sim/sd-webui-bmab
+ 
+ 
