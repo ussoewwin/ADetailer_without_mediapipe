@@ -147,3 +147,9 @@ ADetailer is a derivative work that uses two AGPL-licensed works (stable-diffusi
 ---
 
 **Note**: All commits are GPG signed for verification.
+
+## Latest Update
+
+- YOLOv11 face detection model integration completed
+- Enhanced accuracy with face_yolo11n.pt model
+- Improved UI with automatic model selection
