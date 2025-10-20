@@ -173,11 +173,9 @@ def one_ui_group(n: int, is_img2img: bool, webui_info: WebuiInfo):
     w = Widgets()
     eid = partial(elem_id, n=n, is_img2img=is_img2img)
 
-    model_choices = (
-        [*webui_info.ad_model_list, "None"]
-        if n == 0
-        else ["None", *webui_info.ad_model_list]
-    )
+    # 強制的に正しい順序を設定（face_yolo11n.ptを必ず最初に）
+    available_models = [m for m in webui_info.ad_model_list if m not in ["face_yolov8n.pt", "face_yolo11n.pt", "None"]]
+    model_choices = ["face_yolo11n.pt"] + available_models + ["None"]
 
     with gr.Group():
         with gr.Row(variant="compact"):
@@ -192,7 +190,7 @@ def one_ui_group(n: int, is_img2img: bool, webui_info: WebuiInfo):
             w.ad_model = gr.Dropdown(
                 label="ADetailer detector" + suffix(n),
                 choices=model_choices,
-                value=model_choices[0],
+                value="face_yolo11n.pt" if "face_yolo11n.pt" in model_choices else (model_choices[0] if model_choices else "None"),
                 visible=True,
                 type="value",
                 elem_id=eid("ad_model"),

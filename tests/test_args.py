@@ -18,7 +18,7 @@ def test_all_args() -> None:
 
 @pytest.mark.parametrize(
     ("ad_model", "expect"),
-    [("face_yolov8n.pt", False), ("None", True)],
+    [("face_yolo11n.pt", False), ("face_yolov8s.pt", False), ("None", True)],
 )
 def test_need_skip(ad_model: str, expect: bool) -> None:
     args = ADetailerArgs(ad_model=ad_model)
@@ -28,8 +28,10 @@ def test_need_skip(ad_model: str, expect: bool) -> None:
 @pytest.mark.parametrize(
     ("ad_model", "ad_tab_enable", "expect"),
     [
-        ("face_yolov8n.pt", False, True),
+        ("face_yolo11n.pt", False, True),
+        ("face_yolov8s.pt", False, True),
         ("None", True, True),
+        ("face_yolo11n.pt", True, False),
         ("face_yolov8s.pt", True, False),
     ],
 )

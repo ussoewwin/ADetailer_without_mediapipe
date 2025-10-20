@@ -7,17 +7,19 @@ ADetailer is an extension for the stable diffusion webui that does automatic mas
 This version is a modified ADetailer designed to **work with Python 3.13**:
 
 - **Python 3.13 Compatible**: Fully compatible with Python 3.13+
-- **YOLO Models Only**: Uses proven YOLO models (face_yolov8n, hand_yolov8n, etc.) for detection
-- **Automatic Model Download**: All required YOLO models are automatically downloaded on first run
+- **YOLOv8 & YOLOv11 Models**: Uses proven YOLO models with enhanced YOLOv11 face detection
+- **Automatic Model Download**: All required YOLO models (v8 & v11) are automatically downloaded on first run
+- **Enhanced Face Detection**: YOLOv11 model provides improved face detection accuracy
 - **No MediaPipe**: MediaPipe dependency removed (incompatible with Python 3.13)
 - **Simplified & Clean**: Removed unnecessary code, focusing on what works best
 
 ### Modifications
 
 - Removed MediaPipe and InsightFace dependencies (not needed for YOLO models)
-- `install.py`: Automatic YOLO model download from Hugging Face
-- `common.py`: Removed MediaPipe model options
+- `install.py`: Automatic YOLO model download from Hugging Face and GitHub (YOLOv11)
+- `common.py`: Added YOLOv11 model support, removed MediaPipe model options
 - `pyproject.toml`: Updated dependencies for Python 3.13 compatibility
+- Added YOLOv11 face detection model for enhanced accuracy
 
 Original project: [Bing-su/adetailer](https://github.com/Bing-su/adetailer)
 
@@ -95,21 +97,31 @@ API request example: [wiki/REST-API](https://github.com/Bing-su/adetailer/wiki/R
 
 ## Models
 
-| Model | Target | mAP 50 | mAP 50-95 |
-|-------|--------|--------|-----------|
-| **face_yolov8n.pt** | 2D / realistic face | 0.660 | 0.366 |
-| **face_yolov8s.pt** | 2D / realistic face | 0.713 | 0.404 |
-| **hand_yolov8n.pt** | 2D / realistic hand | 0.767 | 0.505 |
-| **person_yolov8n-seg.pt** | 2D / realistic person | 0.782 (bbox)<br/>0.761 (mask) | 0.555 (bbox)<br/>0.460 (mask) |
-| **person_yolov8s-seg.pt** | 2D / realistic person | 0.824 (bbox)<br/>0.809 (mask) | 0.605 (bbox)<br/>0.508 (mask) |
+### YOLOv8 Models (Stable)
+
+| Model | Target | mAP 50 | mAP 50-95 | Size |
+|-------|--------|--------|-----------|------|
+| **face_yolov8s.pt** | 2D / realistic face | 0.713 | 0.404 | 11.2MB |
+| **hand_yolov8n.pt** | 2D / realistic hand | 0.767 | 0.505 | 6.4MB |
+| **person_yolov8n-seg.pt** | 2D / realistic person | 0.782 (bbox)<br/>0.761 (mask) | 0.555 (bbox)<br/>0.460 (mask) | 6.7MB |
+| **person_yolov8s-seg.pt** | 2D / realistic person | 0.824 (bbox)<br/>0.809 (mask) | 0.605 (bbox)<br/>0.508 (mask) | 11.8MB |
+
+### YOLOv11 Models (Enhanced) ✨
+
+| Model | Target | Expected Improvement | Size |
+|-------|--------|---------------------|------|
+| **face_yolo11n.pt** | 2D / realistic face | ~9% better accuracy than YOLOv8n | ~7MB |
 
 **All models are automatically downloaded on first run.** MediaPipe models have been removed as they are not compatible with Python 3.13+.
 
-The YOLO models can be found on huggingface [Bingsu/adetailer](https://huggingface.co/Bingsu/adetailer).
+**Model Sources:**
+- YOLOv8 models: [Bingsu/adetailer on Hugging Face](https://huggingface.co/Bingsu/adetailer)
+- YOLOv11 face model: [akanametov/yolo-face on GitHub](https://github.com/akanametov/yolo-face)
 
-For a detailed description of the YOLO8 model, see: https://docs.ultralytics.com/models/yolov8/#overview
-
-YOLO World model: https://docs.ultralytics.com/models/yolo-world/
+**Documentation:**
+- YOLOv8: https://docs.ultralytics.com/models/yolov8/
+- YOLOv11: https://docs.ultralytics.com/models/yolo11/
+- YOLO World: https://docs.ultralytics.com/models/yolo-world/
 
 ### Additional Model
 

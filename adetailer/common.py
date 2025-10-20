@@ -27,6 +27,10 @@ class PredictOutput(Generic[T]):
 
 
 def hf_download(file: str, repo_id: str = REPO_ID, check_remote: bool = True) -> str:
+    # face_yolov8n.ptは除外（YOLOv11に置き換え済み）
+    if file == "face_yolov8n.pt":
+        return "INVALID"
+    
     # まずローカルファイルを確認（複数の可能性のあるパスをチェック）
     possible_paths = [
         Path("extensions/adetailer/models") / file,
@@ -84,7 +88,11 @@ def download_models(*names: str, check_remote: bool = True) -> dict[str, str]:
                     name,
                     check_remote=check_remote,
                 )
-    return {name: future.result() for name, future in models.items()}
+    # Preserve order by using OrderedDict
+    result = OrderedDict()
+    for name, future in models.items():
+        result[name] = future.result()
+    return result
 
 
 def get_models(
@@ -99,7 +107,7 @@ def get_models(
 
     models = OrderedDict()
     to_download = [
-        "face_yolov8n.pt",
+        "face_yolo11n.pt",  # YOLOv11 face detection (enhanced accuracy) - First priority
         "face_yolov8s.pt",
         "hand_yolov8n.pt",
         "person_yolov8n-seg.pt",
@@ -114,12 +122,27 @@ def get_models(
     for key in invalid_keys:
         models.pop(key)
 
+    # Add local models while preserving order
     for path in model_paths:
         if path.name in models:
             continue
         models[path.name] = str(path)
 
-    return models
+    # Reorder to ensure YOLOv11 is first
+    ordered_models = OrderedDict()
+    priority_models = ["face_yolo11n.pt", "face_yolov8s.pt"]
+    
+    # Add priority models first
+    for model in priority_models:
+        if model in models:
+            ordered_models[model] = models[model]
+    
+    # Add remaining models
+    for name, path in models.items():
+        if name not in ordered_models:
+            ordered_models[name] = path
+
+    return ordered_models
 
 
 def create_mask_from_bbox(
