@@ -150,6 +150,8 @@ ADetailer is a derivative work that uses two AGPL-licensed works (stable-diffusi
 
 ## Latest Update
 
-- YOLOv11 face detection model integration completed
-- Enhanced accuracy with face_yolo11n.pt model
-- Improved UI with automatic model selection
+- **YOLOv8n → YOLOv11n Upgrade**: Replaced face_yolov8n.pt with face_yolo11n.pt
+- **Enhanced Accuracy**: ~9% improvement over YOLOv8n for face detection
+- **Auto Model Selection**: face_yolo11n.pt now set as default model
+- **UI Improvements**: YOLOv11 model prioritized in dropdown selection
+- **Model Integration**: Complete removal of face_yolov8n.pt from all model lists
