@@ -6,11 +6,11 @@ requires-python = ">=3.9"
 readme = "README.md"
 license = { text = "AGPL-3.0" }
 dependencies = [
-    "ultralytics>=8.2",
-    "mediapipe>=0.10.13",  # Keep minimum version, remove upper limit
+    "ultralytics>=8.3.0",  # Updated for YOLOv11 support
     "pydantic<3",
     "rich>=13",
     "huggingface_hub",
+    "requests",  # For YOLOv11 model download
 ]
 keywords = [
     "stable-diffusion",
