@@ -110,6 +110,11 @@ def download_yolov11_models():
             "name": "face_yolo11n.pt",
             "url": "https://github.com/akanametov/yolo-face/releases/download/v0.0.0/yolov11n-face.pt",
             "size": "~7MB"
+        },
+        {
+            "name": "face_yolo11s.pt",
+            "url": "https://huggingface.co/deepghs/yolo-face/resolve/main/yolov11s-face/model.pt",
+            "size": "~25MB"
         }
     ]
     
