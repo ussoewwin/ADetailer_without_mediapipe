@@ -207,6 +207,10 @@ def install():
         ("rich", "13.0.0", None),
         ("huggingface_hub", None, None),
         ("requests", None, None),  # for YOLOv11 model download
+        # InsightFace dependencies
+        ("onnxruntime", "1.16.0", None),  # Required by InsightFace
+        ("ml_dtypes", "0.4.0", None),  # Fix for InsightFace compatibility
+        ("onnx", "1.15.0", None),  # ONNX for InsightFace
     ]
 
     pkgs = []

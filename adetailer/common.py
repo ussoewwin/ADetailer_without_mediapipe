@@ -17,8 +17,12 @@ from torchvision.transforms.functional import to_pil_image
 try:
     from .insightface_detector import get_insightface_detector, InsightFaceDetector
     INSIGHTFACE_AVAILABLE = True
-except ImportError:
+except ImportError as e:
     INSIGHTFACE_AVAILABLE = False
+    print(f"[-] ADetailer: InsightFace not available: {e}")
+except Exception as e:
+    INSIGHTFACE_AVAILABLE = False
+    print(f"[-] ADetailer: InsightFace import error: {e}")
 
 REPO_ID = "Bingsu/adetailer"
 
@@ -130,6 +134,8 @@ def get_models(
             "insightface_buffalo_m",  # InsightFace Buffalo-M for balanced performance
             "insightface_buffalo_s",  # InsightFace Buffalo-S for speed
         ])
+    else:
+        print("[-] ADetailer: InsightFace not available, using YOLO models only")
     models.update(download_models(*to_download, check_remote=huggingface))
 
     # MediaPipe models removed - use YOLO models instead for Python 3.13+ compatibility
@@ -245,7 +251,8 @@ def insightface_predict(
         Detection results with bounding boxes and confidence scores
     """
     if not INSIGHTFACE_AVAILABLE:
-        raise ImportError("InsightFace is not available")
+        print("[-] ADetailer: InsightFace not available, returning empty results")
+        return PredictOutput(bboxes=[], masks=[], preview=None)
     
     detector = get_insightface_detector()
     if detector is None:

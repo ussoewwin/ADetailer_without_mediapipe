@@ -17,9 +17,12 @@ try:
     import insightface
     from insightface.app import FaceAnalysis
     INSIGHTFACE_AVAILABLE = True
-except ImportError:
+except ImportError as e:
     INSIGHTFACE_AVAILABLE = False
-    logger.warning("InsightFace not available. Install with: pip install insightface")
+    logger.warning(f"InsightFace not available: {e}")
+except Exception as e:
+    INSIGHTFACE_AVAILABLE = False
+    logger.warning(f"InsightFace import error: {e}")
 
 
 class InsightFaceDetector:
