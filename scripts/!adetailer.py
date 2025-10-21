@@ -38,6 +38,7 @@ from adetailer import (
     __version__,
     get_models,
     ultralytics_predict,
+    hybrid_face_predict,
 )
 from adetailer.args import (
     BBOX_SORTBY,
@@ -833,16 +834,30 @@ class AfterDetailerScript(scripts.Script):
         i2i = self.get_i2i_p(p, args, pp.image)
         ad_prompts, ad_negatives = self.get_prompt(p, args)
 
-        # Only YOLO models are supported
+        # Use hybrid detection for face models (YOLO + InsightFace)
         ad_model = self.get_ad_model(args.ad_model)
+        is_face_model = "face" in args.ad_model.lower()
+        
         with disable_safe_unpickle():
-            pred = ultralytics_predict(
-                ad_model,
-                image=pp.image,
-                confidence=args.ad_confidence,
-                device=self.ultralytics_device,
-                classes=args.ad_model_classes,
-            )
+            if is_face_model:
+                # Use hybrid detection for better accuracy on SDXL/Pony
+                pred = hybrid_face_predict(
+                    model_path=ad_model,
+                    image=pp.image,
+                    confidence=args.ad_confidence,
+                    device=self.ultralytics_device,
+                    classes=args.ad_model_classes,
+                    use_insightface=True,
+                    insightface_confidence=max(0.3, args.ad_confidence - 0.1),
+                )
+            else:
+                pred = ultralytics_predict(
+                    ad_model,
+                    image=pp.image,
+                    confidence=args.ad_confidence,
+                    device=self.ultralytics_device,
+                    classes=args.ad_model_classes,
+                )
 
         if pred.preview is None:
             print(

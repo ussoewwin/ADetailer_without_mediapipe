@@ -13,8 +13,17 @@ from PIL import Image, ImageDraw
 from rich import print  # noqa: A004  Shadowing built-in 'print'
 from torchvision.transforms.functional import to_pil_image
 
-# InsightFace removed - using YOLO models only for simplicity
-INSIGHTFACE_AVAILABLE = False
+# Try to import InsightFace for complementary face detection
+try:
+    import insightface
+    from insightface.app import FaceAnalysis
+    from .insightface_detector import InsightFaceDetector, get_insightface_detector
+    INSIGHTFACE_AVAILABLE = True
+except (ImportError, AttributeError) as e:
+    INSIGHTFACE_AVAILABLE = False
+    InsightFaceDetector = None
+    get_insightface_detector = None
+    print(f"[!] InsightFace not available: {e}")
 
 REPO_ID = "Bingsu/adetailer"
 
