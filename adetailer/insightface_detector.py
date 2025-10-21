@@ -14,7 +14,7 @@ except (ImportError, AttributeError):
 class InsightFaceDetector:
     """InsightFace detector wrapper for face detection."""
     
-    def __init__(self, model_name: str = "buffalo_l"):
+    def __init__(self, model_name: str = "buffalo_l", det_size: tuple[int, int] = (1024, 1024)):
         """
         Initialize InsightFace detector.
         
@@ -22,12 +22,15 @@ class InsightFaceDetector:
         ----------
         model_name : str
             Model name (buffalo_l, buffalo_m, buffalo_s)
+        det_size : tuple[int, int]
+            Detection size (width, height) - higher = more accurate but slower
         """
         if not INSIGHTFACE_AVAILABLE:
             raise ImportError("InsightFace is not available")
         
         self.app = FaceAnalysis(name=model_name, providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
-        self.app.prepare(ctx_id=0, det_size=(640, 640))
+        self.det_size = det_size
+        self.app.prepare(ctx_id=0, det_size=det_size)
     
     def detect_faces(self, image: Image.Image, confidence: float = 0.3) -> list[dict]:
         """
@@ -69,7 +72,7 @@ class InsightFaceDetector:
         return results
 
 
-def get_insightface_detector(model_name: str = "buffalo_l") -> InsightFaceDetector | None:
+def get_insightface_detector(model_name: str = "buffalo_l", det_size: tuple[int, int] = (1024, 1024)) -> InsightFaceDetector | None:
     """
     Get or create InsightFace detector instance.
     
@@ -77,6 +80,8 @@ def get_insightface_detector(model_name: str = "buffalo_l") -> InsightFaceDetect
     ----------
     model_name : str
         Model name (buffalo_l, buffalo_m, buffalo_s)
+    det_size : tuple[int, int]
+        Detection size (width, height) - higher = more accurate but slower
     
     Returns
     -------
@@ -87,7 +92,7 @@ def get_insightface_detector(model_name: str = "buffalo_l") -> InsightFaceDetect
         return None
     
     try:
-        return InsightFaceDetector(model_name)
+        return InsightFaceDetector(model_name, det_size)
     except Exception as e:
         print(f"[-] InsightFace: Failed to initialize detector: {e}")
         return None

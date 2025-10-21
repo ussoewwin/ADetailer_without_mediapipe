@@ -257,10 +257,18 @@ def insightface_predict(
     else:
         model_type = "buffalo_l"  # Default
     
-    # Create detector with specific model
+    # Create detector with specific model and dynamic detection size
     try:
         from .insightface_detector import InsightFaceDetector
-        detector = InsightFaceDetector(model_type)
+        # Use larger detection size for SDXL/Pony (1024+) images
+        img_max_size = max(image.width, image.height)
+        if img_max_size >= 1024:
+            det_size = (1280, 1280)  # Higher resolution for SDXL
+        else:
+            det_size = (640, 640)  # Standard for SD1.5
+        
+        detector = InsightFaceDetector(model_type, det_size=det_size)
+        print(f"[-] InsightFace: Using detection size {det_size} for {img_max_size}px image")
     except Exception as e:
         print(f"[-] InsightFace: Failed to create detector: {e}")
         return PredictOutput(bboxes=[], masks=[], preview=None)
