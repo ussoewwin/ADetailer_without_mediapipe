@@ -129,9 +129,9 @@ def get_models(
             continue
         models[path.name] = str(path)
 
-    # Reorder to ensure YOLOv11s is first
+    # Reorder to ensure YOLOv11n is first, then YOLOv11s
     ordered_models = OrderedDict()
-    priority_models = ["face_yolo11s.pt", "face_yolo11n.pt", "face_yolov8s.pt"]
+    priority_models = ["face_yolo11n.pt", "face_yolo11s.pt", "face_yolov8s.pt"]
     
     # Add priority models first
     for model in priority_models:

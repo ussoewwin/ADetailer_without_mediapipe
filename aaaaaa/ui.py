@@ -186,12 +186,12 @@ def one_ui_group(n: int, is_img2img: bool, webui_info: WebuiInfo):
             )
 
         with gr.Row():
-            # Force default to face_yolo11s.pt if available, otherwise first choice
-            default_model = "face_yolo11s.pt" if "face_yolo11s.pt" in model_choices else (model_choices[0] if model_choices else "None")
+            # Default to face_yolo11n.pt for compatibility
+            default_model = "face_yolo11n.pt" if "face_yolo11n.pt" in model_choices else (model_choices[0] if model_choices else "None")
             w.ad_model = gr.Dropdown(
                 label="ADetailer detector" + suffix(n),
                 choices=model_choices,
-                value=default_model,  # Force YOLOv11s as default
+                value=default_model,  # Default to YOLOv11n
                 visible=True,
                 type="value",
                 elem_id=eid("ad_model"),

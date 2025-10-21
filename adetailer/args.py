@@ -54,7 +54,7 @@ class ArgsList(UserList):
 
 
 class ADetailerArgs(BaseModel, extra=Extra.forbid):
-    ad_model: str = "face_yolo11s.pt"  # Default to YOLOv11s for enhanced accuracy
+    ad_model: str = "face_yolo11n.pt"  # Default to YOLOv11n for compatibility
     ad_model_classes: str = ""
     ad_tab_enable: bool = True
     ad_prompt: str = ""
