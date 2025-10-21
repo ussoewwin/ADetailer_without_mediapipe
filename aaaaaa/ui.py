@@ -173,9 +173,8 @@ def one_ui_group(n: int, is_img2img: bool, webui_info: WebuiInfo):
     w = Widgets()
     eid = partial(elem_id, n=n, is_img2img=is_img2img)
 
-    # 強制的に正しい順序を設定（face_yolo11s.ptを必ず最初に、次に11n）
-    available_models = [m for m in webui_info.ad_model_list if m not in ["face_yolov8n.pt", "face_yolo11n.pt", "face_yolo11s.pt", "None"]]
-    model_choices = ["face_yolo11s.pt", "face_yolo11n.pt"] + available_models + ["None"]
+    # Use the model list from get_models which already has correct priority order
+    model_choices = list(webui_info.ad_model_list) + ["None"]
 
     with gr.Group():
         with gr.Row(variant="compact"):
