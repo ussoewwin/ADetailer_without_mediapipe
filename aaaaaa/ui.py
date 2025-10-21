@@ -190,7 +190,7 @@ def one_ui_group(n: int, is_img2img: bool, webui_info: WebuiInfo):
             w.ad_model = gr.Dropdown(
                 label="ADetailer detector" + suffix(n),
                 choices=model_choices,
-                value="face_yolo11s.pt" if "face_yolo11s.pt" in model_choices else (model_choices[0] if model_choices else "None"),
+                value="face_yolo11s.pt",  # Always default to YOLOv11s for best accuracy
                 visible=True,
                 type="value",
                 elem_id=eid("ad_model"),
