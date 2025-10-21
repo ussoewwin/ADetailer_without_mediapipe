@@ -103,13 +103,15 @@ API request example: [wiki/REST-API](https://github.com/Bing-su/adetailer/wiki/R
 
 | Model | Target | Expected Improvement | Size |
 |-------|--------|---------------------|------|
+| **face_yolo11s.pt** | 2D / realistic face | Higher accuracy than YOLOv11n | ~25MB |
 | **face_yolo11n.pt** | 2D / realistic face | ~9% better accuracy than YOLOv8n | ~7MB |
 
 **All models are automatically downloaded on first run.** MediaPipe models have been removed as they are not compatible with Python 3.13+.
 
 **Model Sources:**
 - YOLOv8 models: [Bingsu/adetailer on Hugging Face](https://huggingface.co/Bingsu/adetailer)
-- YOLOv11 face model: [akanametov/yolo-face on GitHub](https://github.com/akanametov/yolo-face)
+- YOLOv11n face model: [akanametov/yolo-face on GitHub](https://github.com/akanametov/yolo-face)
+- YOLOv11s face model: [deepghs/yolo-face on Hugging Face](https://huggingface.co/deepghs/yolo-face)
 
 **Documentation:**
 - YOLOv8: https://docs.ultralytics.com/models/yolov8/
@@ -150,8 +152,9 @@ ADetailer is a derivative work that uses two AGPL-licensed works (stable-diffusi
 
 ## Latest Update
 
-- **YOLOv8n → YOLOv11n Upgrade**: Replaced face_yolov8n.pt with face_yolo11n.pt
-- **Enhanced Accuracy**: ~9% improvement over YOLOv8n for face detection
-- **Auto Model Selection**: face_yolo11n.pt now set as default model
-- **UI Improvements**: YOLOv11 model prioritized in dropdown selection
+- **YOLOv11s Added**: Added face_yolo11s.pt for higher accuracy face detection
+- **Default Model**: face_yolo11s.pt now set as default model (higher accuracy than 11n)
+- **YOLOv8n → YOLOv11 Upgrade**: Replaced face_yolov8n.pt with YOLOv11 models
+- **Enhanced Accuracy**: YOLOv11s provides the best face detection accuracy
+- **UI Improvements**: YOLOv11s model prioritized in dropdown selection
 - **Model Integration**: Complete removal of face_yolov8n.pt from all model lists

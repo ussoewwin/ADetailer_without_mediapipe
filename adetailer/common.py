@@ -107,7 +107,8 @@ def get_models(
 
     models = OrderedDict()
     to_download = [
-        "face_yolo11n.pt",  # YOLOv11 face detection (enhanced accuracy) - First priority
+        "face_yolo11s.pt",  # YOLOv11s face detection (enhanced accuracy) - First priority
+        "face_yolo11n.pt",  # YOLOv11n face detection (smaller, faster)
         "face_yolov8s.pt",
         "hand_yolov8n.pt",
         "person_yolov8n-seg.pt",
@@ -128,9 +129,9 @@ def get_models(
             continue
         models[path.name] = str(path)
 
-    # Reorder to ensure YOLOv11 is first
+    # Reorder to ensure YOLOv11s is first
     ordered_models = OrderedDict()
-    priority_models = ["face_yolo11n.pt", "face_yolov8s.pt"]
+    priority_models = ["face_yolo11s.pt", "face_yolo11n.pt", "face_yolov8s.pt"]
     
     # Add priority models first
     for model in priority_models:
