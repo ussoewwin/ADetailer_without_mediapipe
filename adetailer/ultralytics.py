@@ -116,17 +116,27 @@ def hybrid_face_predict(
         classes=classes,
     )
     
+    # Log YOLO results
+    yolo_count = len(yolo_result.bboxes)
+    print(f"[-] ADetailer: YOLO detection - {yolo_count} faces found (confidence: {confidence:.2f})")
+    
     if not use_insightface or not INSIGHTFACE_AVAILABLE:
+        if not use_insightface:
+            print(f"[-] ADetailer: InsightFace disabled, using YOLO only")
+        else:
+            print(f"[-] ADetailer: InsightFace not available, using YOLO only")
         return yolo_result
     
     # Use InsightFace to find additional faces (complementary detection)
     try:
         # Use InsightFace to find missed faces
+        print(f"[-] ADetailer: Running InsightFace detection (confidence: {insightface_confidence:.2f})")
         insightface_result = insightface_predict(
             image=image,
             model_name="insightface_buffalo_l",  # Use high-accuracy model
             confidence=insightface_confidence,
         )
+        print(f"[-] ADetailer: InsightFace detection - {len(insightface_result.bboxes)} faces found")
         
         # Combine results (YOLO + InsightFace)
         combined_bboxes = yolo_result.bboxes.copy()
@@ -148,7 +158,19 @@ def hybrid_face_predict(
                 if i < len(insightface_result.confidences):
                     combined_confidences.append(insightface_result.confidences[i])
         
-        print(f"[-] ADetailer: Hybrid detection - YOLO: {len(yolo_result.bboxes)}, InsightFace: {len(insightface_result.bboxes)}, Combined: {len(combined_bboxes)}")
+        # Log detailed detection results
+        yolo_count = len(yolo_result.bboxes)
+        insightface_count = len(insightface_result.bboxes)
+        combined_count = len(combined_bboxes)
+        added_count = combined_count - yolo_count
+        
+        print(f"[-] ADetailer: Hybrid detection - YOLO: {yolo_count}, InsightFace: {insightface_count}, Combined: {combined_count}")
+        if added_count > 0:
+            print(f"[-] ADetailer: InsightFace added {added_count} missed faces")
+        elif insightface_count > 0:
+            print(f"[-] ADetailer: InsightFace found {insightface_count} faces but all overlapped with YOLO")
+        else:
+            print(f"[-] ADetailer: No faces detected by either detector")
         
         return PredictOutput(
             bboxes=combined_bboxes,
