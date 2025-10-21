@@ -83,6 +83,7 @@ def hybrid_face_predict(
     """
     Hybrid face detection using YOLO + InsightFace for enhanced accuracy.
     YOLO detects faces first, then InsightFace finds missed faces.
+    This replaces the original MediaPipe + YOLO combination.
     
     Parameters
     ----------
@@ -106,7 +107,7 @@ def hybrid_face_predict(
     PredictOutput[float]
         Combined detection results
     """
-    # First, run YOLO detection
+    # First, run YOLO detection (main detector)
     yolo_result = ultralytics_predict(
         model_path=model_path,
         image=image,
@@ -118,18 +119,19 @@ def hybrid_face_predict(
     if not use_insightface or not INSIGHTFACE_AVAILABLE:
         return yolo_result
     
-    # If YOLO found faces, check if InsightFace can find more
+    # Use InsightFace to find additional faces (complementary detection)
     try:
-        # Use InsightFace to find additional faces
+        # Use InsightFace to find missed faces
         insightface_result = insightface_predict(
             image=image,
             model_name="insightface_buffalo_l",  # Use high-accuracy model
             confidence=insightface_confidence,
         )
         
-        # Combine results
+        # Combine results (YOLO + InsightFace)
         combined_bboxes = yolo_result.bboxes.copy()
         combined_masks = yolo_result.masks.copy()
+        combined_confidences = yolo_result.confidences.copy() if hasattr(yolo_result, 'confidences') else []
         
         # Add InsightFace results that don't overlap significantly with YOLO results
         for i, insight_bbox in enumerate(insightface_result.bboxes):
@@ -143,15 +145,20 @@ def hybrid_face_predict(
                 combined_bboxes.append(insight_bbox)
                 if i < len(insightface_result.masks):
                     combined_masks.append(insightface_result.masks[i])
+                if i < len(insightface_result.confidences):
+                    combined_confidences.append(insightface_result.confidences[i])
+        
+        print(f"[-] ADetailer: Hybrid detection - YOLO: {len(yolo_result.bboxes)}, InsightFace: {len(insightface_result.bboxes)}, Combined: {len(combined_bboxes)}")
         
         return PredictOutput(
             bboxes=combined_bboxes,
             masks=combined_masks,
+            confidences=combined_confidences,
             preview=yolo_result.preview,
         )
         
     except Exception as e:
-        print(f"[-] InsightFace hybrid detection failed: {e}")
+        print(f"[-] ADetailer: InsightFace hybrid detection failed: {e}")
         return yolo_result
 
 

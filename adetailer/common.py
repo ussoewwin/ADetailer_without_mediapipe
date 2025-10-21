@@ -13,16 +13,8 @@ from PIL import Image, ImageDraw
 from rich import print  # noqa: A004  Shadowing built-in 'print'
 from torchvision.transforms.functional import to_pil_image
 
-# Import InsightFace detector
-try:
-    from .insightface_detector import get_insightface_detector, InsightFaceDetector
-    INSIGHTFACE_AVAILABLE = True
-except ImportError as e:
-    INSIGHTFACE_AVAILABLE = False
-    print(f"[-] ADetailer: InsightFace not available: {e}")
-except Exception as e:
-    INSIGHTFACE_AVAILABLE = False
-    print(f"[-] ADetailer: InsightFace import error: {e}")
+# InsightFace removed - using YOLO models only for simplicity
+INSIGHTFACE_AVAILABLE = False
 
 REPO_ID = "Bingsu/adetailer"
 
@@ -127,15 +119,7 @@ def get_models(
         "yolov8x-worldv2.pt",
     ]
     
-    # Add InsightFace models if available
-    if INSIGHTFACE_AVAILABLE:
-        to_download.extend([
-            "insightface_buffalo_l",  # InsightFace Buffalo-L for high accuracy
-            "insightface_buffalo_m",  # InsightFace Buffalo-M for balanced performance
-            "insightface_buffalo_s",  # InsightFace Buffalo-S for speed
-        ])
-    else:
-        print("[-] ADetailer: InsightFace not available, using YOLO models only")
+    # Using YOLO models only for simplicity and reliability
     models.update(download_models(*to_download, check_remote=huggingface))
 
     # MediaPipe models removed - use YOLO models instead for Python 3.13+ compatibility
