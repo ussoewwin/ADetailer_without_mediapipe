@@ -841,14 +841,16 @@ class AfterDetailerScript(scripts.Script):
         with disable_safe_unpickle():
             if is_face_model:
                 # Use hybrid detection for better accuracy on SDXL/Pony
+                # Lower YOLO confidence slightly for anime styles
+                yolo_confidence = max(0.25, args.ad_confidence * 0.85)
                 pred = hybrid_face_predict(
                     model_path=ad_model,
                     image=pp.image,
-                    confidence=args.ad_confidence,
+                    confidence=yolo_confidence,
                     device=self.ultralytics_device,
                     classes=args.ad_model_classes,
                     use_insightface=True,
-                    insightface_confidence=max(0.3, args.ad_confidence - 0.1),
+                    insightface_confidence=max(0.2, args.ad_confidence - 0.15),  # Lower threshold for Pony
                 )
             else:
                 pred = ultralytics_predict(
