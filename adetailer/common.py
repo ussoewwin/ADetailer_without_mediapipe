@@ -13,6 +13,13 @@ from PIL import Image, ImageDraw
 from rich import print  # noqa: A004  Shadowing built-in 'print'
 from torchvision.transforms.functional import to_pil_image
 
+# Import InsightFace detector
+try:
+    from .insightface_detector import get_insightface_detector, InsightFaceDetector
+    INSIGHTFACE_AVAILABLE = True
+except ImportError:
+    INSIGHTFACE_AVAILABLE = False
+
 REPO_ID = "Bingsu/adetailer"
 
 T = TypeVar("T", int, float)
@@ -107,14 +114,22 @@ def get_models(
 
     models = OrderedDict()
     to_download = [
-        "face_yolo11s.pt",  # YOLOv11s face detection (enhanced accuracy) - First priority
-        "face_yolo11n.pt",  # YOLOv11n face detection (smaller, faster)
+        "face_yolo11n.pt",  # YOLOv11n face detection (smaller, faster) - First priority
+        "face_yolo11s.pt",  # YOLOv11s face detection (enhanced accuracy)
         "face_yolov8s.pt",
         "hand_yolov8n.pt",
         "person_yolov8n-seg.pt",
         "person_yolov8s-seg.pt",
         "yolov8x-worldv2.pt",
     ]
+    
+    # Add InsightFace models if available
+    if INSIGHTFACE_AVAILABLE:
+        to_download.extend([
+            "insightface_buffalo_l",  # InsightFace Buffalo-L for high accuracy
+            "insightface_buffalo_m",  # InsightFace Buffalo-M for balanced performance
+            "insightface_buffalo_s",  # InsightFace Buffalo-S for speed
+        ])
     models.update(download_models(*to_download, check_remote=huggingface))
 
     # MediaPipe models removed - use YOLO models instead for Python 3.13+ compatibility
@@ -205,3 +220,72 @@ def ensure_pil_image(image: Any, mode: str = "RGB") -> Image.Image:
     if image.mode != mode:
         image = image.convert(mode)
     return image
+
+
+def insightface_predict(
+    image: Image.Image, 
+    model_name: str, 
+    confidence: float = 0.5
+) -> PredictOutput:
+    """
+    Predict faces using InsightFace for enhanced accuracy.
+    
+    Parameters
+    ----------
+    image : Image.Image
+        Input image
+    model_name : str
+        InsightFace model name (buffalo_l, buffalo_m, buffalo_s)
+    confidence : float
+        Detection confidence threshold
+        
+    Returns
+    -------
+    PredictOutput
+        Detection results with bounding boxes and confidence scores
+    """
+    if not INSIGHTFACE_AVAILABLE:
+        raise ImportError("InsightFace is not available")
+    
+    detector = get_insightface_detector()
+    if detector is None:
+        raise RuntimeError("Failed to initialize InsightFace detector")
+    
+    # Extract model type from model_name
+    if model_name.startswith("insightface_"):
+        model_type = model_name.replace("insightface_", "")
+    else:
+        model_type = "buffalo_l"  # Default
+    
+    # Create detector with specific model
+    try:
+        from .insightface_detector import InsightFaceDetector
+        detector = InsightFaceDetector(model_type)
+    except Exception as e:
+        print(f"[-] InsightFace: Failed to create detector: {e}")
+        return PredictOutput(bboxes=[], masks=[], preview=None)
+    
+    # Detect faces
+    faces = detector.detect_faces(image, confidence)
+    
+    if not faces:
+        return PredictOutput(bboxes=[], masks=[], preview=None)
+    
+    # Convert to PredictOutput format
+    bboxes = []
+    masks = []
+    
+    for face in faces:
+        bbox = face['bbox']
+        conf = face['confidence']
+        
+        # Convert bbox format [x1, y1, x2, y2] to [x1, y1, x2, y2, conf]
+        bboxes.append([bbox[0], bbox[1], bbox[2], bbox[3], conf])
+        
+        # Create mask from bbox
+        mask = Image.new('L', image.size, 0)
+        draw = ImageDraw.Draw(mask)
+        draw.rectangle(bbox, fill=255)
+        masks.append(mask)
+    
+    return PredictOutput(bboxes=bboxes, masks=masks, preview=None)

@@ -8,16 +8,19 @@ This version is a modified ADetailer designed to **work with Python 3.13**:
 
 - **Python 3.13 Compatible**: Fully compatible with Python 3.13+
 - **YOLOv8 & YOLOv11 Models**: Uses proven YOLO models with enhanced YOLOv11 face detection
-- **Automatic Model Download**: All required YOLO models (v8 & v11) are automatically downloaded on first run
-- **Enhanced Face Detection**: YOLOv11 model provides improved face detection accuracy
-- **No MediaPipe**: MediaPipe dependency removed (incompatible with Python 3.13)
-- **Simplified & Clean**: Removed unnecessary code, focusing on what works best
+- **InsightFace Integration**: High-precision face detection using InsightFace for enhanced accuracy
+- **Hybrid Detection**: YOLO + InsightFace combination for maximum face detection coverage
+- **Automatic Model Download**: All required models are automatically downloaded on first run
+- **Enhanced Face Detection**: YOLOv11 + InsightFace provides superior face detection accuracy
+- **MediaPipe Alternative**: InsightFace replaces MediaPipe for Python 3.13 compatibility
 
 ### Modifications
 
-- Removed MediaPipe and InsightFace dependencies (not needed for YOLO models)
-- `install.py`: Automatic YOLO model download from Hugging Face and GitHub (YOLOv11)
-- `common.py`: Added YOLOv11 model support, removed MediaPipe model options
+- **InsightFace Integration**: Added InsightFace for high-precision face detection
+- **Hybrid Detection System**: YOLO detects faces first, InsightFace finds missed faces
+- **Enhanced Accuracy**: Combines YOLO speed with InsightFace precision
+- `install.py`: Automatic model download from Hugging Face and GitHub
+- `common.py`: Added InsightFace model support and hybrid detection
 - `pyproject.toml`: Updated dependencies for Python 3.13 compatibility
 - Added YOLOv11 face detection model for enhanced accuracy
 
@@ -103,10 +106,20 @@ API request example: [wiki/REST-API](https://github.com/Bing-su/adetailer/wiki/R
 
 | Model | Target | Expected Improvement | Size |
 |-------|--------|---------------------|------|
-| **face_yolo11s.pt** | 2D / realistic face | Higher accuracy than YOLOv11n | ~25MB |
 | **face_yolo11n.pt** | 2D / realistic face | ~9% better accuracy than YOLOv8n | ~7MB |
+| **face_yolo11s.pt** | 2D / realistic face | Higher accuracy than YOLOv11n | ~25MB |
 
-**All models are automatically downloaded on first run.** MediaPipe models have been removed as they are not compatible with Python 3.13+.
+### InsightFace Models (High Precision) 🎯
+
+| Model | Target | Accuracy | Speed | Size |
+|-------|--------|----------|-------|------|
+| **insightface_buffalo_l** | 2D / realistic face | Highest | Medium | ~100MB |
+| **insightface_buffalo_m** | 2D / realistic face | High | Fast | ~50MB |
+| **insightface_buffalo_s** | 2D / realistic face | Good | Fastest | ~25MB |
+
+**All models are automatically downloaded on first run.** InsightFace models provide superior face detection accuracy compared to YOLO models, especially for small or angled faces.
+
+**Note**: InsightFace requires manual installation for Python 3.13 compatibility. The install script will automatically download the appropriate wheel file from [ussoewwin/Insightface_for_windows](https://huggingface.co/ussoewwin/Insightface_for_windows).
 
 **Model Sources:**
 - YOLOv8 models: [Bingsu/adetailer on Hugging Face](https://huggingface.co/Bingsu/adetailer)

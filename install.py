@@ -151,6 +151,55 @@ def download_yolov11_models():
     print("[-] ADetailer: YOLOv11 model check complete")
 
 
+def download_insightface():
+    """Download InsightFace wheel for Python 3.13 compatibility"""
+    try:
+        import requests
+    except ImportError:
+        print("[-] ADetailer: Installing requests for InsightFace download...")
+        run_pip("requests")
+        import requests
+    
+    # Check Python version
+    python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
+    print(f"[-] ADetailer: Python version: {python_version}")
+    
+    # Determine wheel file based on Python version
+    if python_version == "3.13":
+        wheel_file = "insightface-0.7.3-cp313-cp313-win_amd64.whl"
+    elif python_version == "3.12":
+        wheel_file = "insightface-0.7.3-cp312-cp312-win_amd64.whl"
+    elif python_version == "3.11":
+        wheel_file = "insightface-0.7.3-cp311-cp311-win_amd64.whl"
+    else:
+        print(f"[-] ADetailer: Python {python_version} not supported for InsightFace wheel")
+        return
+    
+    # Check if InsightFace is already installed
+    if is_installed("insightface"):
+        print("[-] ADetailer: InsightFace already installed")
+        return
+    
+    print(f"[-] ADetailer: Downloading InsightFace wheel for Python {python_version}...")
+    
+    # Download wheel from Hugging Face
+    wheel_url = f"https://huggingface.co/ussoewwin/Insightface_for_windows/resolve/main/{wheel_file}"
+    
+    try:
+        response = requests.get(wheel_url, stream=True)
+        response.raise_for_status()
+        
+        # Install wheel directly
+        print(f"[-] ADetailer: Installing {wheel_file}...")
+        run_pip(f"{wheel_url}")
+        
+        print("[-] ADetailer: InsightFace installation completed")
+        
+    except Exception as e:
+        print(f"[-] ADetailer: Failed to download InsightFace: {e}")
+        print("[-] ADetailer: You can manually install InsightFace from: https://huggingface.co/ussoewwin/Insightface_for_windows")
+
+
 def install():
     deps = [
         # requirements
@@ -181,6 +230,9 @@ def install():
     
     # Download YOLOv11 models for enhanced face detection
     download_yolov11_models()
+    
+    # Download InsightFace for Python 3.13 compatibility
+    download_insightface()
 
 
 try:

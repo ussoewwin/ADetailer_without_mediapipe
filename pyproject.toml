@@ -11,6 +11,7 @@ dependencies = [
     "rich>=13",
     "huggingface_hub",
     "requests",  # For YOLOv11 model download
+    # InsightFace is installed manually via install.py for Python 3.13 compatibility
 ]
 keywords = [
     "stable-diffusion",
