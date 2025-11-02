@@ -25,6 +25,7 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           python-version: ${{ matrix.python-version }}
+          cache-dependency-glob: "pyproject.toml"
 
       - name: Run tests
         run: uv run --all-extras pytest -v
