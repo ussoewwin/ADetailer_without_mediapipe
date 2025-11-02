@@ -8,7 +8,7 @@ from adetailer.ultralytics import ultralytics_predict
 @pytest.mark.parametrize(
     "model_name",
     [
-        "face_yolo11n.pt",
+        # "face_yolo11n.pt",  # Not available on Hugging Face - downloaded from GitHub releases
         "face_yolov8s.pt",
         "face_yolov9c.pt",
         "hand_yolov8n.pt",

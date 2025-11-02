@@ -12,6 +12,7 @@ dependencies = [
     "huggingface_hub",
     "requests",  # For YOLOv11 model download
     # InsightFace is installed manually via install.py for Python 3.13 compatibility
+    "git+https://github.com/ultralytics/CLIP.git",  # For YOLO-world support
 ]
 keywords = [
     "stable-diffusion",
