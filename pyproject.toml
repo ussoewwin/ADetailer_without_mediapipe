@@ -43,11 +43,6 @@ dev-dependencies = []
 [tool.uv.sources]
 clip = { git = "https://github.com/ultralytics/CLIP.git" }
 
-[project.optional-dependencies.test]
-pytest = "*"
-hypothesis = "*"
-clip = { version = "*", source = "clip" }
-
 [tool.hatch.version]
 path = "adetailer/__version__.py"
 
@@ -94,3 +89,6 @@ known-first-party = ["launch", "modules"]
 
 [tool.ruff.lint.pyupgrade]
 keep-runtime-typing = true
+
+[tool.uv.optional-dependencies.test]
+clip = { version = "*", source = "clip" }
