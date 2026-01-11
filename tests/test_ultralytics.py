@@ -10,10 +10,8 @@ from adetailer.ultralytics import ultralytics_predict
     [
         # "face_yolo11n.pt",  # Not available on Hugging Face - downloaded from GitHub releases
         "face_yolov8s.pt",
-        "face_yolov9c.pt",
         "hand_yolov8n.pt",
         "hand_yolov8s.pt",
-        "hand_yolov9c.pt",
         "person_yolov8n-seg.pt",
         "person_yolov8s-seg.pt",
         "person_yolov8m-seg.pt",
