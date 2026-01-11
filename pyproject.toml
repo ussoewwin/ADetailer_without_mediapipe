@@ -1,5 +1,5 @@
 [project]
-name = "adetailer"
+name = "ADetailer_without_mediapipe"
 description = "An object detection and auto-mask extension for stable diffusion webui."
 authors = [{ name = "dowon", email = "ks2515@naver.com" }]
 requires-python = ">=3.9"
