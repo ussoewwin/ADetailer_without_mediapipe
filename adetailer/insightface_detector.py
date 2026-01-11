@@ -1,10 +1,23 @@
 """InsightFace detector for complementary face detection."""
 from __future__ import annotations
 
+import logging
+import os
+from contextlib import redirect_stdout
+from io import StringIO
 import numpy as np
 from PIL import Image
 
+# Suppress ONNX Runtime and InsightFace verbose logging
+os.environ['ORT_LOGGING_LEVEL'] = '3'  # ERROR level
+logging.getLogger('onnxruntime').setLevel(logging.ERROR)
+logging.getLogger('onnxruntime.providers').setLevel(logging.ERROR)
+
 try:
+    import insightface
+    # Suppress InsightFace verbose output
+    logging.getLogger('insightface').setLevel(logging.ERROR)
+    
     from insightface.app import FaceAnalysis
     INSIGHTFACE_AVAILABLE = True
 except (ImportError, AttributeError):
@@ -28,9 +41,11 @@ class InsightFaceDetector:
         if not INSIGHTFACE_AVAILABLE:
             raise ImportError("InsightFace is not available")
         
-        self.app = FaceAnalysis(name=model_name, providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
-        self.det_size = det_size
-        self.app.prepare(ctx_id=0, det_size=det_size)
+        # Suppress verbose logging during initialization
+        with redirect_stdout(StringIO()):
+            self.app = FaceAnalysis(name=model_name, providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
+            self.det_size = det_size
+            self.app.prepare(ctx_id=0, det_size=det_size)
     
     def detect_faces(self, image: Image.Image, confidence: float = 0.3) -> list[dict]:
         """
