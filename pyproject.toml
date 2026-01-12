@@ -39,6 +39,9 @@ build-backend = "hatchling.build"
 [tool.hatch.version]
 path = "adetailer/__version__.py"
 
+[tool.hatch.build.targets.wheel]
+packages = ["adetailer"]
+
 [tool.isort]
 profile = "black"
 known_first_party = ["launch", "modules"]
